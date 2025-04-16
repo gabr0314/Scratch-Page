@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Catch the Image Game</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #f0f8ff;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      margin-top: 20px;
+      color: #333;
+      font-size: 2em;
+      z-index: 2;
+    }
+
+    #gameContainer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    #sneakyImage {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      cursor: pointer;
+      transition: top 0.2s, left 0.2s;
+      z-index: 1;
+    }
+
+    #mockComment {
+      position: absolute;
+      font-size: 2em;
+      font-weight: bold;
+      color: crimson;
+      z-index: 3;
+      pointer-events: none;
+      animation: fade 2s ease-in-out;
+    }
+
+    @keyframes fade {
+      0% { opacity: 0; transform: scale(0.8); }
+      20% { opacity: 1; transform: scale(1); }
+      80% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.2); }
+    }
+  </style>
+</head>
+<body>
+  <h1>To win, press the United logo</h1>
+  <a href="index.html">Back to scratch page</a> 
+  <div id="gameContainer">
+    <img id="sneakyImage" src="Images/United Logo.png" alt="Sneaky" />
+    <div id="mockComment"></div>
+  </div>
+
+  <script>
+    const img = document.getElementById("sneakyImage");
+    const container = document.getElementById("gameContainer");
+    const mockComment = document.getElementById("mockComment");
+
+    const mockComments = [
+      "You missed... again!",
+      "So close, yet so far!",
+      "Nice reflexes… not!",
+      "Try harder!",
+      "Mouse skills? Questionable.",
+      "Hah! Gotcha!",
+      "Maybe one day…",
+      "Nope!",
+      "Whiffed it!",
+      "Keep dreaming!"
+    ];
+
+    function moveImage() {
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+
+      const imgWidth = img.offsetWidth;
+      const imgHeight = img.offsetHeight;
+
+      const newLeft = Math.random() * (containerWidth - imgWidth);
+      const newTop = Math.random() * (containerHeight - imgHeight);
+
+      img.style.left = newLeft + "px";
+      img.style.top = newTop + "px";
+
+      showMockComment();
+    }
+
+    function showMockComment() {
+      const comment = mockComments[Math.floor(Math.random() * mockComments.length)];
+      const x = Math.random() * (window.innerWidth - 300); // limit width
+      const y = Math.random() * (window.innerHeight - 100);
+
+      mockComment.style.left = `${x}px`;
+      mockComment.style.top = `${y}px`;
+      mockComment.textContent = comment;
+
+      // Restart animation
+      mockComment.style.animation = 'none';
+      void mockComment.offsetWidth; // trigger reflow
+      mockComment.style.animation = 'fade 2s ease-in-out';
+    }
+
+    img.addEventListener("mouseenter", moveImage);
+    img.addEventListener("mousemove", moveImage);
+  </script>
+
+</body>
+</html>
